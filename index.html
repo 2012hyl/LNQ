@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>九一魔方第一人 · 李念青</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #14161a;
+    --pink-bg: #fff0f5; /* 樱花粉背景 */
+    --pink-accent: #ff6b8b;
+    --muted: #8a90a0;
+    --ease: cubic-bezier(.22, .61, .36, 1);
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    background: #ffffff;
+    color: var(--ink);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ================== 封面页 ================== */
+  .cover {
+    position: fixed; inset: 0; z-index: 1;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: url('https://2012hyl.github.io/imgbed/images/20261102_212750_5logkc.jpeg') center/cover no-repeat;
+    transition: opacity .8s var(--ease), transform .8s var(--ease), visibility .8s;
+  }
+  
+  .cover::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.85));
+    z-index: -1;
+  }
+
+  body.entered .cover {
+    opacity: 0; visibility: hidden; transform: scale(1.05); pointer-events: none;
+  }
+
+  .cover-title {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+    text-shadow: 0 4px 12px rgba(255,255,255,0.8);
+    animation: rise 1s var(--ease) both;
+  }
+
+  .cover-name {
+    font-size: clamp(3.5rem, 12vw, 7rem);
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(120deg, #ff6b8b, #ff4b6e);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 0.15em;
+    text-indent: 0.15em;
+    margin-bottom: 50px;
+    animation: rise 1s .1s var(--ease) both;
+  }
+
+  .glass-btn {
+    padding: 16px 48px;
+    font-family: inherit; font-size: 1.1rem; font-weight: 600;
+    letter-spacing: 0.2em; text-indent: 0.2em; color: #1a1a1a;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.5);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    backdrop-filter: blur(16px) saturate(180%);
+    box-shadow: 0 10px 30px rgba(255, 107, 139, 0.15), inset 0 1px 0 rgba(255,255,255,1);
+    cursor: pointer;
+    transition: all .4s var(--ease);
+    animation: rise 1s .2s var(--ease) both;
+  }
+  .glass-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 15px 40px rgba(255, 107, 139, 0.25), inset 0 1px 0 rgba(255,255,255,1);
+  }
+
+  /* ================== 内部页面（粉色） ================== */
+  .main-page {
+    position: fixed; inset: 0; z-index: 10;
+    background: var(--pink-bg);
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(255, 182, 193, 0.4) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(255, 218, 224, 0.6) 0%, transparent 50%);
+    opacity: 0; visibility: hidden;
+    transition: opacity .8s var(--ease), visibility .8s;
+    padding: clamp(24px, 5vw, 60px);
+    overflow-y: auto;
+  }
+
+  body.entered .main-page {
+    opacity: 1; visibility: visible;
+  }
+
+  .container {
+    max-width: 900px; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 40px;
+  }
+
+  .profile-header {
+    text-align: center;
+    animation: rise 1s .3s var(--ease) both;
+  }
+
+  .profile-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+  }
+
+  .profile-intro {
+    display: inline-block;
+    padding: 12px 28px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px dashed rgba(255, 107, 139, 0.5);
+    border-radius: 12px;
+    color: var(--pink-accent);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .action-card {
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    padding: 20px;
+    cursor: pointer;
+    box-shadow: 0 12px 32px rgba(255, 107, 139, 0.1);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    transition: all .4s var(--ease);
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    animation: rise 1s .4s var(--ease) both;
+  }
+
+  .action-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 48px rgba(255, 107, 139, 0.2);
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+  .card-img-wrap {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    background: #eee;
+  }
+
+  .card-img-wrap img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform .6s var(--ease);
+  }
+  .action-card:hover .card-img-wrap img {
+    transform: scale(1.08);
+  }
+
+  .action-card h2 {
+    font-size: 1.4rem; font-weight: 700;
+    color: #1a1a1a; margin-bottom: 8px;
+  }
+
+  .action-card p {
+    font-size: 0.9rem; color: #777;
+    letter-spacing: 0.05em;
+  }
+
+  /* ================== 详情弹窗 ================== */
+  .modal {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(20, 22, 26, 0.4);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; visibility: hidden;
+    transition: opacity .4s var(--ease), visibility .4s;
+  }
+  .modal.show { opacity: 1; visibility: visible; }
+
+  .modal-content {
+    width: 100%; max-width: 800px;
+    max-height: 90vh; overflow-y: auto;
+    background: #ffffff;
+    border-radius: 28px;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
+    padding: clamp(24px, 4vw, 40px);
+    transform: scale(0.95) translateY(20px);
+    transition: transform .4s var(--ease);
+    position: relative;
+  }
+  .modal.show .modal-content { transform: scale(1) translateY(0); }
+
+  .modal-close {
+    position: absolute; top: 20px; right: 20px;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: #f0f0f0; border: none; cursor: pointer;
+    display: grid; place-items: center;
+    color: #666; transition: all .3s;
+  }
+  .modal-close:hover {
+    background: var(--pink-accent); color: #fff; transform: rotate(90deg);
+  }
+
+  .modal-imgs {
+    display: flex; gap: 16px; margin-bottom: 24px;
+    overflow-x: auto; padding-bottom: 10px;
+  }
+  .modal-imgs img {
+    height: 300px; border-radius: 12px; object-fit: contain;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  .modal-text h3 {
+    font-size: 1.4rem; color: #1a1a1a; margin-bottom: 16px;
+    border-left: 4px solid var(--pink-accent); padding-left: 12px;
+  }
+
+  .modal-text p {
+    font-size: 1rem; line-height: 1.9; color: #4a4a4a;
+    text-align: justify;
+  }
+
+  /* 动画 */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .modal-imgs { flex-direction: column; }
+    .modal-imgs img { height: auto; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ================== 封面页 ================== -->
+  <div class="cover" id="cover">
+    <div class="cover-title">九一魔方第一人</div>
+    <div class="cover-name">李念青</div>
+    <button class="glass-btn" id="enterBtn">点击进入</button>
+  </div>
+
+  <!-- ================== 内部粉红主页 ================== -->
+  <div class="main-page">
+    <div class="container">
+      
+      <!-- 个人介绍 -->
+      <div class="profile-header">
+        <h1>李念青</h1>
+        <div class="profile-intro">个人介绍：待填</div>
+      </div>
+
+      <!-- 卡片区域 -->
+      <div class="cards-grid">
+        
+        <!-- 魔方卡片 -->
+        <div class="action-card" id="cardCube">
+          <div class="card-img-wrap">
+            <img src="https://2012hyl.github.io/imgbed/images/20261102_214435_k3slng.png" alt="魔方">
+          </div>
+          <h2>魔方竞速</h2>
+          <p>单次上限亮眼，稳定 12 秒级别</p>
+        </div>
+
+        <!-- 跑步卡片 -->
+        <div class="action-card" id="cardRun">
+          <div class="card-img-wrap">
+            <img src="https://2012hyl.github.io/imgbed/images/20261102_214435_k3slng.png" alt="跑步">
+          </div>
+          <h2>路跑竞速</h2>
+          <p>5公里配速4'16"，有氧基础扎实</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== 魔方详情弹窗 ================== -->
+  <div class="modal" id="modalCube">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modalCube')">✕</button>
+      <div class="modal-imgs">
+        <img src="https://2012hyl.github.io/imgbed/images/20261102_213852_r9nkfu.jpeg" alt="魔方图片">
+        <img src="https://2012hyl.github.io/imgbed/images/20261102_214019_gofvcn.jpeg" alt="魔方成绩">
+      </div>
+      <div class="modal-text">
+        <h3>魔方竞速评价</h3>
+        <p>选手拥有不错的竞速天赋，单次上限亮眼，长测稳定在12秒级别。比赛中敢于提速，观察与衔接有自己的节奏；短板在于发挥稳定性，遇到难打乱时容易出现停顿波动。继续打磨F2L预判与连贯练习，未来完全有机会稳定站稳sub10梯队。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== 跑步详情弹窗 ================== -->
+  <div class="modal" id="modalRun">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modalRun')">✕</button>
+      <div class="modal-imgs">
+        <img src="https://2012hyl.github.io/imgbed/images/20261102_214617_5vznnb.jpeg" alt="跑步截图1">
+        <img src="https://2012hyl.github.io/imgbed/images/20261102_214617_b77ujs.jpeg" alt="跑步截图2">
+      </div>
+      <div class="modal-text">
+        <h3>跑步竞速评价</h3>
+        <p>该选手速度能力突出，5公里可稳定达到4′16″配速，具备优秀的竞速上限；同时能够兼顾长距离有氧训练，以5′21″配速完成8公里持续跑动，快慢训练搭配合理。跑动步幅舒展，步频稳定，心肺基础扎实。短板在于高强度跑中心率偏高，耐力储备仍有提升空间，若优化节奏分配，成绩还有进一步突破的潜力。</p>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // 进入页面
+  document.getElementById('enterBtn').addEventListener('click', () => {
+    document.body.classList.add('entered');
+  });
+
+  // 弹窗逻辑
+  const modalCube = document.getElementById('modalCube');
+  const modalRun = document.getElementById('modalRun');
+
+  document.getElementById('cardCube').addEventListener('click', () => {
+    modalCube.classList.add('show');
+  });
+
+  document.getElementById('cardRun').addEventListener('click', () => {
+    modalRun.classList.add('show');
+  });
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+  }
+
+  // 点击遮罩关闭
+  window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal')) {
+      e.target.classList.remove('show');
+    }
+  });
+
+  // ESC 关闭
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      modalCube.classList.remove('show');
+      modalRun.classList.remove('show');
+    }
+  });
+</script>
+</body>
+</html>
