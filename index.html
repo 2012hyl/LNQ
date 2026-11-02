@@ -121,7 +121,17 @@
     100% { transform: translateY(105vh) rotate(360deg) translateX(50px); opacity: 0; }
   }
 
-  .content { display: flex; align-items: flex-start; gap: clamp(20px, 5vw, 50px); flex-wrap: wrap; max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+  /* 主页左上角抖音悬浮按钮 */
+  .floating-douyin {
+    position: fixed; top: clamp(20px, 4vw, 40px); left: clamp(20px, 4vw, 40px); z-index: 50;
+    display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 999px;
+    background: #14161a; color: #fff; text-decoration: none; font-size: 0.95rem; font-weight: 600;
+    box-shadow: 0 10px 25px rgba(20, 22, 26, 0.15); transition: all 0.3s var(--ease);
+  }
+  .floating-douyin svg { fill: currentColor; }
+  .floating-douyin:hover { background: var(--douyin); transform: translateY(-2px) scale(1.05); box-shadow: 0 15px 30px rgba(254, 44, 85, 0.3); }
+
+  .content { display: flex; align-items: flex-start; gap: clamp(20px, 5vw, 50px); flex-wrap: wrap; max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; padding-top: 40px; }
 
   /* 轮播图 */
   .media-block { width: min(45vw, 340px); flex-shrink: 0; margin: 0 auto; }
@@ -153,19 +163,6 @@
   .info .role { font-size: .95rem; color: var(--muted); letter-spacing: .1em; margin-bottom: 20px; }
   .info .bio { font-size: 1rem; line-height: 1.9; color: #464c5c; padding: 20px; background: rgba(255,255,255,0.6); border-radius: 16px; border: 1px solid rgba(255,255,255,0.9); }
   .info .bio strong { color: #d45079; font-weight: 600; }
-
-  /* 新增：主页醒目的抖音按钮 */
-  .douyin-main-btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    margin-top: 15px; padding: 15px 30px; border-radius: 999px;
-    background: #14161a; color: #fff; text-decoration: none; font-size: 1rem; font-weight: 600;
-    box-shadow: 0 10px 25px rgba(20, 22, 26, 0.2);
-    transition: all 0.3s var(--ease); border: 1px solid transparent;
-  }
-  .douyin-main-btn svg { fill: currentColor; }
-  .douyin-main-btn:hover {
-    background: var(--douyin); transform: translateY(-3px); box-shadow: 0 15px 30px rgba(254, 44, 85, 0.35);
-  }
 
   /* 特长卡片区 */
   .video-section { width: 100%; max-width: 1000px; margin: 30px auto 0; padding-top: 20px; border-top: 1px solid rgba(212, 80, 121, 0.15); position: relative; z-index: 1;}
@@ -201,37 +198,34 @@
   .card-cube::before { background-image: url('https://2012hyl.github.io/imgbed/images/20261102_215703_cuct7a.jpeg'); }
   .card-run::before { background-image: url('https://2012hyl.github.io/imgbed/images/20261102_214435_k3slng.png'); }
 
-  /* ============ 独立全屏详情页 ============ */
+  /* ============ 独立全屏详情页（彻底修复若隐若现） ============ */
   .detail-page {
     position: fixed; inset: 0; z-index: 999;
-    background: #ffffff; /* 纯色底，防止闪烁 */
     display: flex; flex-direction: column;
-    opacity: 0; visibility: hidden; transform: translateX(100%);
-    transition: opacity .4s var(--ease), transform .4s var(--ease), visibility .4s;
-    overflow: hidden;
+    opacity: 0; visibility: hidden; transform: translateY(100%);
+    transition: opacity .4s ease, transform .4s ease, visibility .4s;
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+    /* 彻底禁用半透明和特效，纯色底防止闪烁 */
   }
-  .detail-page.show { opacity: 1; visibility: visible; transform: translateX(0); }
+  .detail-page.show { opacity: 1; visibility: visible; transform: translateY(0); }
 
-  /* 详情页的专属主题色 */
+  /* 详情页专属主题色 */
   .detail-page.theme-dark { background: #0f172a; color: #fff; }
   .detail-page.theme-pink { background: #fff0f5; color: var(--ink); }
 
-  /* 顶部固定导航栏 */
+  /* 顶部固定导航栏（放左上角抖音） */
   .detail-header {
     position: absolute; top: 0; left: 0; right: 0; z-index: 10;
-    padding: 20px; display: flex; justify-content: space-between; align-items: center;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, transparent 100%); /* 淡淡的渐变让文字更清晰 */
-    pointer-events: none;
+    padding: clamp(15px, 4vw, 30px); display: flex; justify-content: space-between; align-items: flex-start;
+    pointer-events: none; /* 让底层内容可滑，但按钮可点 */
   }
-  .theme-pink .detail-header { background: linear-gradient(to bottom, rgba(255,255,255,0.8) 0%, transparent 100%); }
-  
   .detail-header > * { pointer-events: auto; }
 
   /* 左上角抖音按钮 */
   .douyin-btn {
     display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 999px;
     background: #14161a; color: #fff; text-decoration: none; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em;
-    transition: all 0.3s var(--ease); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
   }
   .douyin-btn svg { fill: currentColor; }
   .douyin-btn:hover { background: var(--douyin); transform: scale(1.05); }
@@ -239,44 +233,40 @@
   /* 右上角关闭按钮 */
   .close-page {
     width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
-    display: grid; place-items: center;
-    background: rgba(255,255,255,0.2); color: inherit;
-    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-    transition: all 0.3s var(--ease);
+    display: grid; place-items: center; background: rgba(0,0,0,0.1); color: inherit;
+    transition: all 0.3s ease;
   }
-  .theme-pink .close-page { background: rgba(0,0,0,0.05); }
-  .close-page:hover { background: rgba(255,255,255,0.4); transform: rotate(90deg); }
-  .theme-pink .close-page:hover { background: rgba(0,0,0,0.1); }
+  .theme-dark .close-page { background: rgba(255,255,255,0.1); }
+  .close-page:hover { transform: rotate(90deg); }
+  .theme-dark .close-page:hover { background: rgba(255,255,255,0.2); }
+  .theme-pink .close-page:hover { background: rgba(0,0,0,0.2); }
 
-  /* 详情页滚动内容区 */
+  /* 详情页内容区 */
   .detail-body {
-    flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-    display: flex; flex-direction: column;
+    width: 100%; max-width: 800px; margin: 0 auto;
+    padding-top: 80px; padding-bottom: 40px;
   }
 
-  /* 图片容器 */
+  /* 图片容器（不再限制高度，跟着页面自然滚动，彻底解决闪烁） */
   .detail-img-box {
-    width: 100%; background: #000;
-    display: flex; justify-content: center; align-items: center;
-    padding: 10px;
+    width: 100%; padding: 10px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px;
   }
+  .theme-dark .detail-img-box { background: #000; }
   .theme-pink .detail-img-box { background: transparent; }
+  
   .detail-img-box img {
-    width: 100%; max-height: 60vh; object-fit: contain;
-    border-radius: 8px;
+    width: 100%; max-width: 100%; height: auto;
+    border-radius: 8px; object-fit: contain;
   }
 
   /* 文字容器 */
   .detail-text-box {
-    padding: 30px clamp(20px, 5vw, 60px);
-    max-width: 800px; margin: 0 auto; width: 100%;
+    padding: 30px clamp(20px, 5vw, 40px);
   }
   .detail-text-box h3 {
     font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 15px; font-weight: 800;
   }
-  .theme-dark h3 { color: #fff; }
-  .theme-pink h3 { color: var(--ink); }
-  
   .detail-text-box p {
     font-size: clamp(1rem, 1.5vw, 1.1rem); line-height: 1.8; text-align: justify;
   }
@@ -289,7 +279,7 @@
     position: relative; display: block; width: fit-content; margin: 40px auto 20px; 
     padding: 12px 30px; font-family: inherit; font-size: .88rem; letter-spacing: .12em; 
     color: #d45079; cursor: pointer; border-radius: 999px; border: 1px solid rgba(212, 80, 121, 0.2); 
-    background: rgba(255, 255, 255, .8); backdrop-filter: blur(12px); transition: all .35s var(--ease);
+    background: rgba(255, 255, 255, .8); transition: all .35s var(--ease);
   }
   .back-btn:hover { background: #d45079; border-color: #d45079; color: #fff; transform: translateY(-2px); }
 
@@ -307,6 +297,8 @@
     .info-col { width: 100%; max-width: 100%; }
     .card-grid { gap: 15px; }
     .para-card { width: 45vw; max-width: 180px; }
+    
+    .floating-douyin { padding: 10px 16px; font-size: 0.85rem; }
     .detail-header { padding: 15px; }
     .douyin-btn { padding: 8px 16px; font-size: 0.85rem; }
     .close-page { width: 40px; height: 40px; }
@@ -345,6 +337,12 @@
   <section class="page" id="page">
     <div class="sakura-container" id="sakuraContainer"></div>
 
+    <!-- 主页左上角悬浮抖音 -->
+    <a href="https://v.douyin.com/o-TZwvN4qdc/" target="_blank" class="floating-douyin">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12.5 3c-1.3 0-2.4 1.1-2.4 2.4v11.2c0 2.1-1.7 3.8-3.8 3.8s-3.8-1.7-3.8-3.8 1.7-3.8 3.8-3.8c.5 0 1 .1 1.4.3V9.4c-.4-.1-.9-.2-1.4-.2-4.1 0-7.5 3.4-7.5 7.5s3.4 7.5 7.5 7.5c4.1 0 7.5-3.4 7.5-7.5V9.2c1.4 1.1 3.2 1.8 5.1 1.8V7.3c-2.8 0-5.1-2.3-5.1-5.1h-3.3z"/></svg>
+      帅哥抖音
+    </a>
+
     <div class="content">
       <!-- 左侧轮播 -->
       <div class="media-block">
@@ -362,7 +360,7 @@
         </div>
       </div>
 
-      <!-- 右侧信息 + 主页抖音直达 -->
+      <!-- 右侧信息 -->
       <div class="info-col">
         <div class="info">
           <span class="eyebrow">PROFILE</span>
@@ -373,12 +371,6 @@
             待填
           </p>
         </div>
-        
-        <!-- 主页醒目的抖音按钮 -->
-        <a href="https://v.douyin.com/o-TZwvN4qdc/" target="_blank" class="douyin-main-btn">
-          <svg viewBox="0 0 24 24" width="20" height="20"><path d="M12.5 3c-1.3 0-2.4 1.1-2.4 2.4v11.2c0 2.1-1.7 3.8-3.8 3.8s-3.8-1.7-3.8-3.8 1.7-3.8 3.8-3.8c.5 0 1 .1 1.4.3V9.4c-.4-.1-.9-.2-1.4-.2-4.1 0-7.5 3.4-7.5 7.5s3.4 7.5 7.5 7.5c4.1 0 7.5-3.4 7.5-7.5V9.2c1.4 1.1 3.2 1.8 5.1 1.8V7.3c-2.8 0-5.1-2.3-5.1-5.1h-3.3z"/></svg>
-          直达帅哥抖音
-        </a>
       </div>
     </div>
 
@@ -409,7 +401,7 @@
     <button class="back-btn" id="back" type="button">返回封面</button>
   </section>
 
-  <!-- ========== 魔方详情页（完全独立的全屏页面） ========== -->
+  <!-- ========== 魔方详情页（彻底独立纯色全屏） ========== -->
   <div class="detail-page theme-dark" id="cubePage">
     <div class="detail-header">
       <a href="https://v.douyin.com/o-TZwvN4qdc/" target="_blank" class="douyin-btn">
@@ -431,7 +423,7 @@
     </div>
   </div>
 
-  <!-- ========== 跑步详情页（完全独立的全屏页面） ========== -->
+  <!-- ========== 跑步详情页（彻底独立纯色全屏） ========== -->
   <div class="detail-page theme-pink" id="runPage">
     <div class="detail-header">
       <a href="https://v.douyin.com/o-TZwvN4qdc/" target="_blank" class="douyin-btn">
@@ -498,7 +490,7 @@
     setTimeout(() => { cover.classList.remove('zoom-through'); }, 800);
   });
 
-  /* ================= 独立页面逻辑 ================= */
+  /* ================= 独立详情页逻辑 ================= */
   const cubePage = document.getElementById('cubePage');
   const runPage  = document.getElementById('runPage');
 
